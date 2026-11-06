@@ -5,6 +5,48 @@
 #include <dt-bindings/soc/rockchip,vop2.h>
 
 &{/soc} {
+	sram@fe480000 {
+		compatible = "mmio-sram";
+		reg = <0x0 0xfe480000 0x0 0xc000>;
+		ranges = <0x0 0x0 0xfe480000 0xc000>;
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		vdec_sram: rkvdec-sram@0 {
+			reg = <0x0 0xc000>;
+			pool;
+		};
+	};
+
+	vdec_mmu: iommu@ff740800 {
+		compatible = "rockchip,rk3528-vdec-iommu", "rockchip,rk3568-iommu";
+		reg = <0x0 0xff740800 0x0 0x40>,
+		      <0x0 0xff740900 0x0 0x40>;
+		interrupts = <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>;
+		/* Both MMUs need the CABAC clock during reset. */
+		clocks = <&cru ACLK_RKVDEC>, <&cru HCLK_RKVDEC>,
+			 <&cru CLK_HEVC_CA_RKVDEC>;
+		clock-names = "aclk", "iface", "hevc_cabac";
+		#iommu-cells = <0>;
+		status = "disabled";
+	};
+
+	vdec: video-codec@ff740000 {
+		compatible = "rockchip,rk3528-vdec";
+		reg = <0x0 0xff740000 0x0 0x100>,
+		      <0x0 0xff740100 0x0 0x400>;
+		reg-names = "link", "function";
+		interrupts = <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>;
+		clocks = <&cru ACLK_RKVDEC>, <&cru HCLK_RKVDEC>,
+			 <&cru CLK_HEVC_CA_RKVDEC>;
+		clock-names = "axi", "ahb", "hevc_cabac";
+		assigned-clocks = <&cru ACLK_RKVDEC>, <&cru CLK_HEVC_CA_RKVDEC>;
+		assigned-clock-rates = <340000000>, <600000000>;
+		iommus = <&vdec_mmu>;
+		sram = <&vdec_sram>;
+		status = "disabled";
+	};
+
 	sai2: sai@ffb90000 {
 		compatible = "rockchip,rk3528-sai", "rockchip,rk3576-sai";
 		reg = <0x0 0xffb90000 0x0 0x1000>;
