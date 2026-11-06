@@ -40,8 +40,11 @@ BL31_BLOB="rk35/rk3528_bl31_v1.21.elf"
 enable_extension "h96max"
 enable_extension "ea6x21q"
 
-# Mainline U-Boot configuration follows the native RK3528 ROCK 2 boards.
+# Apply board CPU settings and mainline U-Boot configuration.
 function post_family_config__h96max_mainline() {
+    declare -g GOVERNOR="performance"
+    declare -g CPUBOOST="true"
+
     [[ "${BRANCH}" == vendor* ]] && return 0
 
     display_alert "$BOARD" "Using mainline U-Boot for H96 Max / ${BRANCH}" "info"

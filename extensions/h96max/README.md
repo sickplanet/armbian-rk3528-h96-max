@@ -12,6 +12,13 @@ The RK3528 HDMI/VOP2 patch is active. It lives in
 patch/kernel/archive/rockchip64-7.3/rk35xx-rk3528-display-hdmi-vop2.patch.
 The rk35xx- prefix sorts it after the RK3562 VOP2 patch.
 
+## CPU performance
+
+The image selects the performance governor and requests CPU boost at boot.
+The current device tree has no boost frequency, so the kernel rejects boost.
+The highest available CPU frequency is 2.016 GHz. Thermal limits remain active.
+The SCMI clock rounds requests from 2.112 to 2.4 GHz down to 2.016 GHz.
+
 ## Front panel
 
 The board boot script runs `h96max-early.scr` before loading the kernel.
