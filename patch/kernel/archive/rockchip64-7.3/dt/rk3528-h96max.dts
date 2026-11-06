@@ -296,6 +296,11 @@
 	status = "okay";
 };
 
+&gpu {
+	mali-supply = <&vdd_gpu>;
+	status = "okay";
+};
+
 &sai2 {
 	status = "okay";
 };
