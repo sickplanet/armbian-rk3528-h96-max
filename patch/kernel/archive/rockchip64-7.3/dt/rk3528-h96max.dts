@@ -247,12 +247,12 @@
 	cap-mmc-highspeed;
 	cap-sd-highspeed;
 	disable-wp;
-	max-frequency = <50000000>;
+	max-frequency = <150000000>;
 	vqmmc-supply = <&vccio_sd>;
 	vmmc-supply = <&vcc_sd>;
 
-	/delete-property/ sd-uhs-sdr104;
-	/delete-property/ sd-uhs-sdr50;
+	sd-uhs-sdr104;
+	sd-uhs-sdr50;
 	/delete-property/ sd-uhs-sdr25;
 	/delete-property/ sd-uhs-sdr12;
 

@@ -19,6 +19,12 @@ The current device tree has no boost frequency, so the kernel rejects boost.
 The highest available CPU frequency is 2.016 GHz. Thermal limits remain active.
 The SCMI clock rounds requests from 2.112 to 2.4 GHz down to 2.016 GHz.
 
+## SD card
+
+The SD controller supports SDR50 and SDR104 at up to 150 MHz.
+A tested card reached 63.6 MiB/s with SDR104 at 148.5 MHz.
+Repeated direct reads matched, but long-term reliability remains untested.
+
 ## Front panel
 
 The board boot script runs `h96max-early.scr` before loading the kernel.
