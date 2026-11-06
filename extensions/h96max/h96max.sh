@@ -1,6 +1,12 @@
 # SPDX-License-Identifier: MIT
 # H96 Max RK3528 kernel configuration fragment.
 
+function pre_customize_image__h96max_display() {
+    install -D -m 0755 "${EXTENSION_DIR}/files/h96max-display.sh" "${SDCARD}/usr/local/sbin/h96max-display"
+    install -D -m 0644 "${EXTENSION_DIR}/files/h96max-display.service" "${SDCARD}/etc/systemd/system/h96max-display.service"
+    chroot_sdcard systemctl enable h96max-display.service
+}
+
 function custom_kernel_config__h96max() {
     local fragment="${EXTENSION_DIR}/kernel.config"
     local fragment_hash

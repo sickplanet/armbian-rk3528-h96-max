@@ -1,0 +1,10 @@
+[Unit]
+Description=H96 Max front-panel display
+After=local-fs.target
+
+[Service]
+ExecStart=/usr/local/sbin/h96max-display
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
