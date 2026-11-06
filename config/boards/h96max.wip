@@ -1,0 +1,64 @@
+# SPDX-License-Identifier: MIT
+# H96 Max TV box - Rockchip RK3528.
+
+BOARD_NAME="H96 Max RK3528"
+BOARD_VENDOR="h96"
+BOARDFAMILY="rk35xx"
+INTRODUCED="2026"
+
+KERNEL_TARGET="edge"
+KERNEL_TEST_TARGET="edge"
+
+FULL_DESKTOP="yes"
+DESKTOP_ENVIRONMENT="xfce"
+DESKTOP_TIER="mid"
+
+BOOT_LOGO="desktop"
+BOOT_FDT_FILE="rockchip/rk3528-h96max.dtb"
+BOOTCONFIG="rock-2-rk3528_defconfig"
+BOOT_SCENARIO="spl-blobs"
+IMAGE_PARTITION_TABLE="gpt"
+
+# Preserve the tested H96 Max Linux 6.1 SD-card partition layout.
+# Raw Rockchip U-Boot image remains at sector 64 (32 KiB).
+# Partition 1: ext4 /boot, 256 MiB, starts at 16 MiB.
+# Partition 2: ext4 rootfs, starts at 272 MiB.
+OFFSET=16
+BOOTSIZE=256
+BOOTFS_TYPE="ext4"
+BOOT_FS_LABEL="armbi_boot"
+ROOT_FS_LABEL="armbi_root"
+
+# Preserve original H96 Max boot configuration.
+SRC_EXTLINUX="no"
+SRC_CMDLINE="rootwait rootfstype=ext4 console=ttyS0,1500000 console=tty1 loglevel=7"
+
+# Same RK3528 DDR/BL31 blobs used by the native ROCK 2A/2F definitions.
+DDR_BLOB="rk35/rk3528_ddr_1056MHz_v1.14.bin"
+BL31_BLOB="rk35/rk3528_bl31_v1.21.elf"
+
+enable_extension "h96max"
+enable_extension "ea6x21q"
+
+# Mainline U-Boot configuration follows the native RK3528 ROCK 2 boards.
+function post_family_config__h96max_mainline() {
+    [[ "${BRANCH}" == vendor* ]] && return 0
+
+    display_alert "$BOARD" "Using mainline U-Boot for H96 Max / ${BRANCH}" "info"
+
+    declare -g BOOTDELAY=1
+    declare -g BOOTSOURCE="https://github.com/u-boot/u-boot.git"
+    declare -g BOOTBRANCH="tag:v2026.10"
+    declare -g BOOTPATCHDIR="v2026.10"
+    declare -g BOOTDIR="u-boot-${BOARD}"
+
+    declare -g UBOOT_TARGET_MAP="BL31=${RKBIN_DIR}/${BL31_BLOB} ROCKCHIP_TPL=${RKBIN_DIR}/${DDR_BLOB};;u-boot-rockchip.bin"
+    unset uboot_custom_postprocess write_uboot_platform write_uboot_platform_mtd
+
+    function write_uboot_platform() {
+        dd "if=$1/u-boot-rockchip.bin" "of=$2" bs=32k seek=1 conv=notrunc status=none
+    }
+
+    declare -g BOOTSCRIPT="boot-rockchip64-ttyS0.cmd:boot.cmd"
+    declare -g SERIALCON="ttyS0"
+}
