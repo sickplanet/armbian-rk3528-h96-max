@@ -5,6 +5,58 @@
 #include <dt-bindings/soc/rockchip,vop2.h>
 
 &{/soc} {
+	sai2: sai@ffb90000 {
+		compatible = "rockchip,rk3528-sai", "rockchip,rk3576-sai";
+		reg = <0x0 0xffb90000 0x0 0x1000>;
+		interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_HIGH>;
+		clocks = <&cru MCLK_SAI_I2S2>, <&cru HCLK_SAI_I2S2>;
+		clock-names = "mclk", "hclk";
+		dmas = <&dmac 4>;
+		dma-names = "tx";
+		resets = <&cru SRST_M_SAI_I2S2>, <&cru SRST_H_SAI_I2S2>;
+		reset-names = "m", "h";
+		#sound-dai-cells = <0>;
+		status = "disabled";
+	};
+
+	acodec: audio-codec@ffe10000 {
+		compatible = "rockchip,rk3528-codec";
+		reg = <0x0 0xffe10000 0x0 0x1000>;
+		clocks = <&cru PCLK_ACODEC>, <&cru MCLK_ACODEC_TX>;
+		clock-names = "pclk", "mclk";
+		resets = <&cru SRST_P_ACODEC>;
+		reset-names = "acodec";
+		#sound-dai-cells = <0>;
+		status = "disabled";
+	};
+
+	sai3: sai@ffb70000 {
+		compatible = "rockchip,rk3528-sai", "rockchip,rk3576-sai";
+		reg = <0x0 0xffb70000 0x0 0x1000>;
+		interrupts = <GIC_SPI 128 IRQ_TYPE_LEVEL_HIGH>;
+		clocks = <&cru MCLK_SAI_I2S3>, <&cru HCLK_SAI_I2S3>;
+		clock-names = "mclk", "hclk";
+		dmas = <&dmac 5>;
+		dma-names = "tx";
+		power-domains = <&power RK3528_PD_VO>;
+		resets = <&cru SRST_M_SAI_I2S3>, <&cru SRST_H_SAI_I2S3>;
+		reset-names = "m", "h";
+		#sound-dai-cells = <0>;
+		status = "disabled";
+	};
+
+	spdif: spdif@ffbc0000 {
+		compatible = "rockchip,rk3568-spdif";
+		reg = <0x0 0xffbc0000 0x0 0x1000>;
+		interrupts = <GIC_SPI 130 IRQ_TYPE_LEVEL_HIGH>;
+		clocks = <&cru MCLK_SPDIF>, <&cru HCLK_SPDIF>;
+		clock-names = "mclk", "hclk";
+		dmas = <&dmac 7>;
+		dma-names = "tx";
+		#sound-dai-cells = <0>;
+		status = "disabled";
+	};
+
 	vop: vop@ff840000 {
 		compatible = "rockchip,rk3528-vop";
 		reg = <0x0 0xff840000 0x0 0x3000>;

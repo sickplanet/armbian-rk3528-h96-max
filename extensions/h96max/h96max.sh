@@ -10,6 +10,11 @@ function pre_customize_image__h96max_display() {
     chroot_sdcard systemctl enable h96max-display.service
 }
 
+function pre_customize_image__h96max_audio() {
+    install -D -m 0644 "${EXTENSION_DIR}/files/60-h96max-spdif-mirror.conf" \
+        "${SDCARD}/etc/pipewire/pipewire.conf.d/60-h96max-spdif-mirror.conf"
+}
+
 function custom_kernel_config__h96max() {
     local fragment="${EXTENSION_DIR}/kernel.config"
     local fragment_hash
