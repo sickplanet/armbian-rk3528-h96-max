@@ -4,6 +4,9 @@
 function pre_customize_image__h96max_display() {
     install -D -m 0755 "${EXTENSION_DIR}/files/h96max-display.sh" "${SDCARD}/usr/local/sbin/h96max-display"
     install -D -m 0644 "${EXTENSION_DIR}/files/h96max-display.service" "${SDCARD}/etc/systemd/system/h96max-display.service"
+    install -D -m 0644 "${SRC}/config/bootscripts/boot-rockchip64-ttyS0.cmd" "${SDCARD}/boot/h96max-main.cmd"
+    mkimage -C none -A arm -T script -d "${EXTENSION_DIR}/files/h96max-early-display.cmd" "${SDCARD}/boot/h96max-early.scr"
+    mkimage -C none -A arm -T script -d "${SDCARD}/boot/h96max-main.cmd" "${SDCARD}/boot/h96max-main.scr"
     chroot_sdcard systemctl enable h96max-display.service
 }
 

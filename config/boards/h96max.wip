@@ -59,6 +59,6 @@ function post_family_config__h96max_mainline() {
         dd "if=$1/u-boot-rockchip.bin" "of=$2" bs=32k seek=1 conv=notrunc status=none
     }
 
-    declare -g BOOTSCRIPT="boot-rockchip64-ttyS0.cmd:boot.cmd"
+    declare -g BOOTSCRIPT="boot-h96max.cmd:boot.cmd"
     declare -g SERIALCON="ttyS0"
 }
